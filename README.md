@@ -11,11 +11,14 @@ func main() {
 	l.SetFormatter(&logrus.JSONFormatter{})
 	ctxrus.SetLogger(l)
 
-	myFunc()
+	ctx := ctxrus.AddFields(context.Background(), logrus.Fields{
+		"method": "GET",
+	})
+
+	myFunc(ctx)
 }
 
-func myFunc() {
-	ctx := context.Background()
-	ctxrus.GetLogger(ctx).Info("hello")
+func myFunc(ctx context.Context) {
+	ctxrus.GetLogger(ctx).Info("hello") // Log: {"level":"info","method":"GET","msg":"hello","time":"2022-06-30T13:02:14+02:00"}
 }
 ```
